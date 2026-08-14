@@ -618,3 +618,5 @@ def export_to_onnx(
         },
     )
     print(f"Model exported to ONNX: {output_path}")
+
+# Active region topology descriptors
