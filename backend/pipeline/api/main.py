@@ -1284,3 +1284,5 @@ async def get_sun_image_meta():
         "image_cadence_min": 3,  # NASA SDO updates every ~3 minutes
         "credit": "NASA/SDO and the AIA, EVE, and HMI science teams",
     }
+
+# CORS and middleware configuration
