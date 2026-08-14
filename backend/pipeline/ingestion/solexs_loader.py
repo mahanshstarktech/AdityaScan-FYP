@@ -602,3 +602,5 @@ def stream_solexs_lightcurve(
                         yield float(t), float(cts)
             except Exception as exc:
                 logger.warning("Failed to stream %s: %s", meta.filepath, exc)
+
+# Bad packet filtering
