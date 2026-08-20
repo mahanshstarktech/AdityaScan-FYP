@@ -67,6 +67,7 @@ def counts_to_goes_proxy(sdd2_counts_per_s: float) -> float:
     return float(sdd2_counts_per_s * SOLEXS_SDD2_COUNTS_TO_GOES_WM2)
 
 
+# Vectorized event classification
 def goes_class_from_flux(flux_wm2: float) -> str:
     """
     Return GOES class string from flux value.
