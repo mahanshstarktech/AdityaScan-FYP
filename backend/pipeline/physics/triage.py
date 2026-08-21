@@ -278,3 +278,5 @@ class TriageEngine:
             return "WATCH"
         else:
             return "QUIET"
+
+# Added background subtraction
