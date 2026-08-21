@@ -126,3 +126,5 @@
   animation: alert-pulse 3s ease-in-out infinite;
 }
 @utility animate-glow-pulse { animation: glow-pulse 2.4s ease-in-out infinite; }
+
+/* Subtle glowing border animation */
