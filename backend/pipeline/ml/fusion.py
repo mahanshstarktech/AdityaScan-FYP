@@ -621,3 +621,5 @@ def export_to_onnx(
 
 # Active region topology: 42 SHARP parameters mapped to hidden states
 # Vectorized batch processing
+
+# Dynamic Focal Loss implementation
