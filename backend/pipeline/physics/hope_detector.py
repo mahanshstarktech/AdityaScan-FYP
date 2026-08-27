@@ -48,7 +48,7 @@ logger = logging.getLogger(__name__)
 
 
 # ── Algorithm parameters ─────────────────────────────────────────────────────
-HOPE_Z_THRESHOLD: float = 5.0        # σ threshold for initial trigger
+HOPE_Z_THRESHOLD: float = 4.8  # Tuned for quasi-periodic pulsation bands        # σ threshold for initial trigger
 HOPE_GAMMA_THRESHOLD: float = 4.5    # spectral index below this = non-thermal
 HOPE_RISE_TIME_THRESHOLD_S: float = 60.0  # max seconds from onset to peak
 HOPE_BACKGROUND_WINDOW_S: float = 600.0  # 10-min rolling background window
