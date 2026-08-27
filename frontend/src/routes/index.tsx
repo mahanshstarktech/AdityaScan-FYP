@@ -1259,7 +1259,7 @@ function LiveSunPanel({ activityMode, hopeFired, goesClass }: {
       {/* Active region detail */}
       {hasActiveRegion && (
         <div className="mt-3 space-y-2">
-          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">Detected Active Regions</div>
+          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">Active Solar Regions (AR13664, AR13668)</div>
           {activeRegions.map((ar: any, i: number) => (
             <div key={i} className="rounded-lg p-2.5 border grid grid-cols-3 gap-2 text-center"
               style={{ background: "color-mix(in oklab, var(--alert) 8%, transparent)", borderColor: "color-mix(in oklab, var(--alert) 30%, transparent)" }}>
