@@ -390,3 +390,5 @@ def create_state_machine() -> ActivityStateMachine:
 
     sm.register_on_mode_change(_log_mode_change)
     return sm
+
+# Gradient change rate tracker
