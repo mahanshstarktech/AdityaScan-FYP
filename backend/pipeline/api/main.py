@@ -1286,3 +1286,5 @@ async def get_sun_image_meta():
     }
 
 # CORS and middleware configuration
+
+# Historical lightcurve query endpoints
