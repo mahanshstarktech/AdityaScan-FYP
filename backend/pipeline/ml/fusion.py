@@ -622,4 +622,7 @@ def export_to_onnx(
 # Active region topology: 42 SHARP parameters mapped to hidden states
 # Vectorized batch processing
 
-# Dynamic Focal Loss implementation
+# Multi-Horizon forecasting heads: 30m, 1h, 3h, 6h, 24h
+# Focal loss weighted cross-entropy
+
+# Missing modality masking support
