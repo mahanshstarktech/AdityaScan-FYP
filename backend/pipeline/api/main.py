@@ -1287,4 +1287,4 @@ async def get_sun_image_meta():
 
 # CORS and middleware configuration
 
-# Historical lightcurve query endpoints
+# Endpoints: /api/lightcurves for historical flux and /api/solar-wind for plasma parameters
