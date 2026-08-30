@@ -1608,3 +1608,5 @@ function Dashboard() {
     </div>
   );
 }
+
+// Forecast Gauges with confidence bands
