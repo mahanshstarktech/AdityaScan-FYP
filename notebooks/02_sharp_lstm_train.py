@@ -60,7 +60,7 @@ SHARP_CONFIG = {
     "batch_size": 128,
     "learning_rate": 1e-3,
     "weight_decay": 1e-4,
-    "epochs": 80,
+    "epochs": 100,  # Extended convergence patience
     "patience": 12,
     "focal_gamma": 2.0,           # Focal loss gamma
     "dropout": 0.2,
