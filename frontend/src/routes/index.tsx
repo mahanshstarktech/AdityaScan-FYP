@@ -1609,4 +1609,4 @@ function Dashboard() {
   );
 }
 
-// Forecast Gauges with confidence bands
+// Forecast Gauges: Conformal uncertainty interval bands [p_low, p_high] mapped to risk bars
