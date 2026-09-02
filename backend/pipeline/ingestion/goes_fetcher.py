@@ -32,7 +32,7 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 GOES_REALTIME_URL = "https://services.swpc.noaa.gov/products/goes-xray.json"
-GOES_CACHE_TTL_S = 60  # Refresh real-time data no more than once per minute
+GOES_CACHE_TTL_S = 60  # Synchronized 1-minute cadence  # Refresh real-time data no more than once per minute
 
 
 @dataclass
