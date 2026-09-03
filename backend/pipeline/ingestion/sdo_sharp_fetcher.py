@@ -62,7 +62,7 @@ SHARP_ML_FEATURES = [
     "TOTFZ", "ABSNJZH", "EPSZ", "TOTFX", "TOTFY", "NACR",
 ]
 
-JSOC_SERIES = "hmi.sharp_cea_720s"
+JSOC_SERIES = "hmi.sharp_cea_720s"  # Projected CEA coordinate frames
 
 
 class SHARPFetcher:
