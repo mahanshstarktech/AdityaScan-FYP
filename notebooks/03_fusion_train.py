@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 FUSION_CONFIG = {
     "batch_size": 64,
-    "learning_rate": 5e-5,     # Very small LR for fine-tuning
+    "learning_rate": 3e-5,  # Stabilized AdamW learning rate     # Very small LR for fine-tuning
     "weight_decay": 1e-4,
     "epochs": 30,
     "patience": 8,
