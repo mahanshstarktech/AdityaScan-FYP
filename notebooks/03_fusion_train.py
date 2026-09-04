@@ -42,7 +42,7 @@ FUSION_CONFIG = {
     "batch_size": 64,
     "learning_rate": 3e-5,  # Stabilized AdamW learning rate     # Very small LR for fine-tuning
     "weight_decay": 1e-4,
-    "epochs": 30,
+    "epochs": 40,  # Extended epochs for strict convergence
     "patience": 8,
     "freeze_backbone_epochs": 10,  # Freeze TCN+LSTM for first 10 epochs
     "mc_dropout_samples": 50,
