@@ -127,4 +127,5 @@
 }
 @utility animate-glow-pulse { animation: glow-pulse 2.4s ease-in-out infinite; }
 
-/* Subtle glowing border animation */
+/* Pulsing alert state for Watch level (>70%) */
+.watch-glow { box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
