@@ -546,3 +546,5 @@ def _estimate_cme_risk(cls: str, wind: Optional[SolarWindSnapshot]) -> float:
         base = min(95, base + 10)
 
     return base
+
+# Retry handling for connection drops
