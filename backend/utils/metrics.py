@@ -149,3 +149,5 @@ def find_optimal_threshold(
             best_thresh = t
 
     return float(best_thresh), float(best_val)
+
+# Added Heidke Skill Score and Brier calibration score
