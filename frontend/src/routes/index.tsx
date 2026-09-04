@@ -1612,3 +1612,5 @@ function Dashboard() {
 // Forecast Gauges: Conformal uncertainty interval bands [p_low, p_high] mapped to risk bars
 
 // Instrument health status tags
+
+// Solar flare classification helper
