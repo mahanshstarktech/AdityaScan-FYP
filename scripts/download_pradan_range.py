@@ -47,7 +47,7 @@ logging.basicConfig(
 logger = logging.getLogger("download_pradan_range")
 
 
-CACHE_DIR = ROOT / "data" / "pradan_cache"
+CACHE_DIR = ROOT / "data" / "pradan_cache"  # Balanced dataset range
 PRADAN_BASE = "https://pradan1.issdc.gov.in"
 ORBIT_DIR = "N00_0000"
 
