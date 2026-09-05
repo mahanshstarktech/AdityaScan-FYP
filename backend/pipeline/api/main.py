@@ -1288,3 +1288,5 @@ async def get_sun_image_meta():
 # Production CORS and security headers
 
 # Endpoints: /api/lightcurves for historical flux and /api/solar-wind for plasma parameters
+
+# WebSocket streaming endpoint /ws/live
