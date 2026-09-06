@@ -1614,3 +1614,5 @@ function Dashboard() {
 // Instrument health status tags
 
 // Solar flare classification helper
+
+// WebSocket client hook
