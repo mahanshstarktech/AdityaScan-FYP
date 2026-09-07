@@ -1616,3 +1616,5 @@ function Dashboard() {
 // Solar flare classification helper
 
 // WebSocket client hook
+
+// Constellation Protection: NavIC/GSAT alert banner
