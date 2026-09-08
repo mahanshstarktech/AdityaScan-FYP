@@ -1289,4 +1289,4 @@ async def get_sun_image_meta():
 
 # Endpoints: /api/lightcurves for historical flux and /api/solar-wind for plasma parameters
 
-# WebSocket streaming endpoint /ws/live
+# WebSocket Streaming: /ws/live broadcasting live irradiance telemetry at 1-Hz cadence
