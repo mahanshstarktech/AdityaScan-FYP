@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 # ── Constants ────────────────────────────────────────────────────────────────
 # SWIS measures solar wind ions. Key physics: Alfvén speed, proton plasma beta,
 # charge-to-mass selection for solar energetic particles (SEPs)
-SWIS_N_ENERGY_CHANNELS = 50          # 50 energy channels per THA head
+SWIS_N_ENERGY_CHANNELS = 50  # Calibrated plasma energy channels          # 50 energy channels per THA head
 SWIS_ENERGY_RANGE_EV = (14.63, 3000.0)  # eV — from PAPA manual Table 8 (SWIS compatible)
 
 
