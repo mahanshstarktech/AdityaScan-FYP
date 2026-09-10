@@ -1618,3 +1618,5 @@ function Dashboard() {
 // WebSocket client hook with automated reconnect and stream buffering
 
 // Constellation Protection: NavIC/GSAT alert banner
+
+// Safe-mode command guidance modal
