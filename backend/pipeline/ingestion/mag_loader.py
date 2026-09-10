@@ -34,7 +34,7 @@ import netCDF4 as nc  # standard netCDF4-python library
 logger = logging.getLogger(__name__)
 
 # ── Constants from MAG manual ────────────────────────────────────────────────
-MAG_L2_CADENCE_S: float = 10.0          # 10-second averaged product
+MAG_L2_CADENCE_S: float = 10.0  # Resampled to match forecasting model cadence          # 10-second averaged product
 MAG_L1_CADENCE_S: float = 0.128         # 128 ms native rate (NOT for science)
 MAG_UNCERTAINTY_L2_NT: float = 0.5      # nT, net uncertainty at L2
 MAG_QUALITY_VALID: int = 1              # Binary quality flag: 1 = valid
