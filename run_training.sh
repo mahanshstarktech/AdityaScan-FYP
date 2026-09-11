@@ -1,4 +1,5 @@
 #!/bin/bash
+# Production training runner with automatic fallback
 # =============================================================================
 # AdityScan v4 — M4 Mac Setup & REAL Incremental Training Runner
 # =============================================================================
