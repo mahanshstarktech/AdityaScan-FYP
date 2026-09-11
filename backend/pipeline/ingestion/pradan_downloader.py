@@ -749,3 +749,5 @@ async def fetch_all_aditya_data() -> dict:
     except Exception as exc:
         logger.error("Aditya-L1 data fetch failed: %s", exc)
         return {"solexs": None, "helios": None, "error": str(exc)}
+
+# Parallel thread pool downloader
