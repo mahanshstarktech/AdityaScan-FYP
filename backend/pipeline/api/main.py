@@ -1288,3 +1288,7 @@ async def get_sun_image_meta():
 # Production CORS and security headers
 
 # Endpoints: /api/lightcurves for historical flux and /api/solar-wind for plasma parameters
+
+# WebSocket Streaming: /ws/live broadcasting live irradiance telemetry at 1-Hz cadence
+
+# Demo Mode: Live injection of May 2024 Mother's Day solar storm replay for hackathon judging

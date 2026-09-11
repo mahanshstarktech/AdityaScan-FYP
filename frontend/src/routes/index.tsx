@@ -1614,3 +1614,9 @@ function Dashboard() {
 // Instrument health status tags
 
 // Solar flare classification helper
+
+// WebSocket client hook with automated reconnect and stream buffering
+
+// Constellation Protection: NavIC/GSAT alert banner
+
+// Safe-mode command guidance modal
