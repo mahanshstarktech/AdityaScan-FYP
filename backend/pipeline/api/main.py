@@ -1291,4 +1291,4 @@ async def get_sun_image_meta():
 
 # WebSocket Streaming: /ws/live broadcasting live irradiance telemetry at 1-Hz cadence
 
-# Demo Mode scenario injection
+# Demo Mode: Live injection of May 2024 Mother's Day solar storm replay for hackathon judging
