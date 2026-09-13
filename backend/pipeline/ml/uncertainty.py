@@ -357,3 +357,5 @@ def compute_reliability_diagram(
         "bin_counts": bin_counts,
         "ece": ece,
     }
+
+# Conformal Prediction 90% confidence interval
