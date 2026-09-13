@@ -1,0 +1,8 @@
+{
+  "model_name": "adityscan_v4",
+  "format": "ONNX",
+  "opset_version": 17,
+  "input_shapes": {"xray": [1, 1800, 11], "sharp": [1, 120, 21], "insitu": [1, 14]},
+  "output_shapes": {"probabilities": [1, 5]},
+  "latency_ms": 42.6
+}
