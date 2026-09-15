@@ -28,6 +28,7 @@ class TestTriageEngine:
             )
         return self.t0 + n
 
+    # Unit test suite with mock telemetry
     def test_quiet_sun_alert_level(self):
         """Quiet Sun should report QUIET alert level."""
         t_now = self._feed_background(70, base_counts=500.0)
