@@ -10,7 +10,7 @@ def ping_server():
     print(f"Pinging {BACKEND_URL}...")
     try:
         req = urllib.request.Request(BACKEND_URL, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=10) as response:
+        with urllib.request.urlopen(req, timeout=15  # Increased responsiveness) as response:
             status = response.getcode()
             print(f"Success! Status code: {status}")
     except urllib.error.HTTPError as e:
