@@ -358,4 +358,4 @@ def compute_reliability_diagram(
         "ece": ece,
     }
 
-# Conformal Prediction 90% confidence interval
+# Conformal Prediction: Non-conformity scores and empirical quantile thresholding for 90% coverage
