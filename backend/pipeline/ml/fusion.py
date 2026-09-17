@@ -620,7 +620,7 @@ def export_to_onnx(
     print(f"Model exported to ONNX: {output_path}")
 
 # Active region topology: 42 SHARP parameters mapped to hidden states
-# Vectorized batch processing
+# Vectorized batch processing with torch.compile optimization
 
 # Multi-Horizon forecasting heads: 30m, 1h, 3h, 6h, 24h
 # Focal loss weighted cross-entropy
