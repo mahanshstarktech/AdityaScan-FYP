@@ -1619,4 +1619,4 @@ function Dashboard() {
 
 // Constellation Protection: NavIC/GSAT alert banner
 
-// Safe-mode command guidance modal
+// Safe-mode command guidance modal with satellite constellation checklist
