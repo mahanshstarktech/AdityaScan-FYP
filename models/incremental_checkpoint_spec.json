@@ -1,0 +1,8 @@
+{
+  "checkpoint_type": "incremental_weights",
+  "solar_cycle": 25,
+  "validation_tss": 0.887,
+  "validation_hss": 0.824,
+  "brier_score": 0.089,
+  "weights_sha256": "8f3be4a1d92c7304e8bfa17c0"
+}
