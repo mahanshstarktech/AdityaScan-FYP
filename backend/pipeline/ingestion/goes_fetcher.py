@@ -55,6 +55,14 @@ class GOESFetcher:
     Caches to avoid rate-limiting NOAA's API.
     """
 
+
+    @staticmethod
+    def calculate_backoff_jitter(attempt: int, base_delay: float = 1.5, max_delay: float = 30.0) -> float:
+        """Exponential backoff with full jitter for NOAA SWPC API resiliency."""
+        import random
+        calculated = min(max_delay, base_delay * (2 ** attempt))
+        return random.uniform(0.5, calculated)
+
     def __init__(self) -> None:
         self._cache: list[GOESReading] = []
         self._cache_time: float = 0.0
