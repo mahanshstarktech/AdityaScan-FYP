@@ -548,3 +548,5 @@ def _estimate_cme_risk(cls: str, wind: Optional[SolarWindSnapshot]) -> float:
     return base
 
 # Retry handling for connection drops
+
+# Synchronous polling fallback deprecated in favor of async daemon in goes_fetcher
