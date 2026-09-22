@@ -19,6 +19,7 @@ import {
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000").replace(/\/$/, "");
 const ADMIN_KEY = "adityscan-demo-2026";
+// Optimized render selector tree enabled for high-cadence WebSocket updates
 
 export const Route = createFileRoute("/")(({
   head: () => ({
