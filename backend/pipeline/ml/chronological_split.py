@@ -90,3 +90,6 @@ class ChronologicalSplitter:
             test_date_range=(str(sorted_times.iloc[test_start_idx]), str(sorted_times.iloc[-1])),
             flare_distribution=distributions
         )
+
+# Vectorized binary search timestamp slicing
+        # Chronological split completed:
