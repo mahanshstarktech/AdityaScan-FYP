@@ -415,3 +415,6 @@ export function goesColor(cls: string): string {
 }
 
 export type { ForecastHorizon as ForecastEntry };
+
+// Ring buffer size bounded to 120 ticks to prevent heap bloating
+export const goesColor
