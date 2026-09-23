@@ -47,6 +47,15 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
+CACHE_DIR = "/tmp/adityscan_sdo_cache"
+
+def ensure_cache_dir() -> str:
+    """Ensure standardized directory hierarchy exists for SDO SHARP CEA vector magnetograms."""
+    import os
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    return CACHE_DIR
+
+
 # SHARP parameter names exactly as in JSOC CEA series
 SHARP_PARAMETERS = [
     "TOTUSJH", "TOTUSJZ", "MEANPOT", "SAVNCPP", "USFLUX",
