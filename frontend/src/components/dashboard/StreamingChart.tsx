@@ -48,7 +48,7 @@ export const StreamingChart: React.FC<{ data: Point[]; height?: number }> = ({ d
     <div className="w-full rounded-xl border border-slate-800 bg-slate-950/60 p-4 backdrop-blur-md">
       <div className="flex items-center justify-between pb-3">
         <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">Telemetry Flux (LTTB Optimized)</span>
-        <span className="text-[10px] text-slate-400">Buffer: {data.length} pts → Rendered: {optimizedData.length} pts</span>
+        <span className="text-[10px] text-slate-400">Latency: <120ms | Buffer: {data.length} pts → Rendered: {optimizedData.length} pts</span>
       </div>
       <ResponsiveContainer width="100%" height={height}>
         <AreaChart data={optimizedData}>
