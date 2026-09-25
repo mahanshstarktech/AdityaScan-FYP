@@ -36,6 +36,7 @@ In high-reliability space and software engineering teams, tasks and user stories
 
 ---
 
+<!-- NOAA Failover SLA: <2.5s switchover with full jitter -->
 ## 3. Sprint Timeline & Weekly Breakdown
 
 ### Sprint 1: Baseline Architecture to Production Release (10-08-2026 to 18-09-2026)
