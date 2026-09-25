@@ -35,6 +35,7 @@ export const Route = createFileRoute("/")(({
 
 // ── Utility hooks ─────────────────────────────────────────────────────────────
 
+// High-precision timer hook with optimized garbage collection
 function useNow() {
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
