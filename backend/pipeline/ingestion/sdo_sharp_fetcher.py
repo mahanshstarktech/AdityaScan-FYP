@@ -49,6 +49,41 @@ logger = logging.getLogger(__name__)
 
 CACHE_DIR = "/tmp/adityscan_sdo_cache"
 
+
+class LRUCacheManager:
+    """LRU disk cache manager for multi-gigabyte SDO SHARP CEA magnetograms."""
+    def __init__(self, cache_dir: str = CACHE_DIR, max_bytes: int = 10 * 1024 * 1024 * 1024) -> None:
+        self.cache_dir = cache_dir
+        self.max_bytes = max_bytes
+
+    def prune_if_needed(self) -> int:
+        import os
+        total_size = 0
+        entries = []
+        for root, _, files in os.walk(self.cache_dir):
+            for f in files:
+                fp = os.path.join(root, f)
+                try:
+                    stat = os.stat(fp)
+                    total_size += stat.st_size
+                    entries.append((stat.st_mtime, stat.st_size, fp))
+                except OSError:
+                    pass
+        pruned_bytes = 0
+        if total_size > self.max_bytes:
+            entries.sort(key=lambda x: x[0])  # oldest first
+            for mtime, size, fp in entries:
+                try:
+                    os.remove(fp)
+                    total_size -= size
+                    pruned_bytes += size
+                    if total_size <= self.max_bytes * 0.85:
+                        break
+                except OSError:
+                    pass
+        return pruned_bytes
+
+
 def ensure_cache_dir() -> str:
     """Ensure standardized directory hierarchy exists for SDO SHARP CEA vector magnetograms."""
     import os
