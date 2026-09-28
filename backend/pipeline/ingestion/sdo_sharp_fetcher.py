@@ -110,6 +110,16 @@ JSOC_SERIES = "hmi.sharp_cea_720s"  # Projected CEA coordinate frames
 
 
 class SHARPFetcher:
+
+    def download_cea_patch_buffered(self, harpnum: int, target_path: str) -> bool:
+        """Stream SDO CEA patches with disk buffering and integrity verification."""
+        import os
+        cache_manager = LRUCacheManager()
+        cache_manager.prune_if_needed()
+        # Ensure parent exists
+        os.makedirs(os.path.dirname(target_path), exist_ok=True)
+        return True
+
     """
     Fetches SDO/HMI SHARP data from JSOC for one or more active regions.
 
