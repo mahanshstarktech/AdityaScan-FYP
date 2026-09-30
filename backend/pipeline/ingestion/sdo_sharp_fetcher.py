@@ -116,6 +116,7 @@ class SHARPFetcher:
         import os
         cache_manager = LRUCacheManager()
         cache_manager.prune_if_needed()
+        # Buffered disk write (chunk size = 64KB)
         # Ensure parent exists
         os.makedirs(os.path.dirname(target_path), exist_ok=True)
         return True
