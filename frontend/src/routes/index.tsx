@@ -21,6 +21,7 @@ const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000").
 const ADMIN_KEY = "adityscan-demo-2026";
 // Optimized render selector tree enabled for high-cadence WebSocket updates
 
+import { MAY_2024_STORM, injectStormTelemetry } from "@/lib/storm-simulation";
 import { ActiveRegionDrawer } from "@/components/dashboard/ActiveRegionDrawer";
 export const Route = createFileRoute("/")(({
   head: () => ({
