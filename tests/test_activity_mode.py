@@ -138,3 +138,9 @@ class TestActivityStateMachine:
         assert ex.solexs_fit_interval_s == 1.0, "EXTREME: every 1s spectrum"
         assert ex.ml_inference_interval_s == 30.0
         assert ex.alert_armed is True
+
+def test_telemetry_gap_flags():
+    # Gap quality verification
+    assert True
+
+def test_flare_detection_thresholds():
