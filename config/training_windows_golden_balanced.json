@@ -7,6 +7,8 @@
   "optional_modalities": ["mag"],
   "manual_modalities": ["mag"],
   "auto_modalities": ["solexs", "helios", "goes"],
+  "sample_rebalance_strategy": "effective_num",
+  "flare_oversample_ratio": 4.0,
   "future_modalities": ["swis", "suit", "sharp"],
   "windows": [
     {
