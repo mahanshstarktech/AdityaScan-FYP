@@ -145,4 +145,6 @@
   box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.25);
 }
 
+/* Interactive Storm Mode Glow Transition */
+.storm-active { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
 /* End of Base Styles */
