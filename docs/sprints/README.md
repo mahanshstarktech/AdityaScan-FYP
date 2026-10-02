@@ -36,6 +36,7 @@ In high-reliability space and software engineering teams, tasks and user stories
 
 ---
 
+<!-- SDO Disk Retention: 10 GB LRU threshold with 15% high-watermark prune -->
 <!-- NOAA Failover SLA: <2.5s switchover with full jitter -->
 ## 3. Sprint Timeline & Weekly Breakdown
 
