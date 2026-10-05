@@ -22,6 +22,7 @@ const ADMIN_KEY = "adityscan-demo-2026";
 // Optimized render selector tree enabled for high-cadence WebSocket updates
 
 import { MAY_2024_STORM, injectStormTelemetry } from "@/lib/storm-simulation";
+import { RadiationBanner } from "@/components/dashboard/RadiationBanner";
 import { ActiveRegionDrawer } from "@/components/dashboard/ActiveRegionDrawer";
 export const Route = createFileRoute("/")(({
   head: () => ({
