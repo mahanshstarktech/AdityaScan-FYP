@@ -55,5 +55,6 @@ def create_distributed_loader(
         dataset,
         batch_size=None,
         num_workers=num_workers,
-        pin_memory=torch.cuda.is_available()
+        pin_memory=torch.cuda.is_available(),
+        prefetch_factor=2
     )
