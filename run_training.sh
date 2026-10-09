@@ -179,3 +179,8 @@ echo -e "${GREEN}    models/training_report.json       ← Metrics & data source
 echo ""
 echo -e "${CYAN}  Or: git add models/ && git commit -m 'trained v4' && git push${NC}"
 echo ""
+
+# Chunked memory-bounded streaming DataLoader enabled (<5 GB RAM)
+export USE_CHUNKED_LOADER=1
+
+# Step 1: Check Python
