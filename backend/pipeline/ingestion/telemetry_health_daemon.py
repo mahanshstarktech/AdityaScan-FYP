@@ -14,6 +14,7 @@ class TelemetryHealthDaemon:
         self.log_path = log_path
         self.drop_count = 0
         self.rate_limit_seconds = 10.0
+        self.is_active = True
         self.frame_count = 0
 
     def record_frame(self, frame_id: int, is_valid: bool) -> None:
