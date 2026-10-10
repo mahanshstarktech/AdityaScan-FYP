@@ -7,8 +7,16 @@ from __future__ import annotations
 import logging
 from typing import Dict, List, Tuple, Iterator, Optional
 import numpy as np
-import torch
-from torch.utils.data import Sampler
+try:
+    import torch
+    from torch.utils.data import Sampler
+except ImportError:
+    torch = None
+    class Sampler:
+        def __class_getitem__(cls, item):
+            return cls
+
+
 
 logger = logging.getLogger(__name__)
 

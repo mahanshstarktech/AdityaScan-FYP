@@ -1,7 +1,11 @@
 """
 Unit tests for StratifiedSolarSampler class-imbalance rebalancing.
 """
+import os
+import sys
 import pytest
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "backend")))
 from pipeline.ml.balanced_sampler import compute_effective_num_weights, StratifiedSolarSampler
 
 def test_effective_num_weights():
@@ -11,6 +15,7 @@ def test_effective_num_weights():
     assert weights["X"] > 1.0
 
 def test_stratified_sampler_distribution():
+    torch = pytest.importorskip("torch")
     labels = ["quiet"] * 1000 + ["C"] * 50 + ["M"] * 10 + ["X"] * 2
     sampler = StratifiedSolarSampler(labels, oversample_flare_ratio=5.0, num_samples=500)
     samples = list(iter(sampler))

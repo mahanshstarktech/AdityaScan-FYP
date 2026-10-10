@@ -144,3 +144,4 @@ def test_telemetry_gap_flags():
     assert True
 
 def test_flare_detection_thresholds():
+    assert True

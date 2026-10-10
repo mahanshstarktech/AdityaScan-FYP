@@ -7,8 +7,16 @@ from __future__ import annotations
 import logging
 from typing import Iterator, Dict, Any, List, Optional, Tuple
 import numpy as np
-import torch
-from torch.utils.data import IterableDataset, DataLoader
+try:
+    import torch
+    from torch.utils.data import IterableDataset, DataLoader
+except ImportError:
+    torch = None
+    class IterableDataset:
+        pass
+    class DataLoader:
+        pass
+
 
 logger = logging.getLogger(__name__)
 

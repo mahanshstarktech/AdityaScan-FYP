@@ -1,7 +1,11 @@
 """
 Integration tests for AdityaGoesSyncBenchmark.
 """
+import os
+import sys
 import numpy as np
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "backend")))
 from pipeline.ingestion.sync_validator import AdityaGoesSyncBenchmark
 
 def test_sync_benchmark_nominal():
