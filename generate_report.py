@@ -49,7 +49,10 @@ def get_git_metrics(interval="weekly"):
     git_args = ['git', 'log', '--no-merges', '--pretty=format:COMMIT|||%h|||%an|||%ad|||%s', '--date=short', '--numstat']
     
     if interval == "weekly":
-        since_date = (today - datetime.timedelta(days=7)).strftime("%Y-%m-%d")
+        if "SINCE_DATE" in os.environ:
+            since_date = os.environ["SINCE_DATE"]
+        else:
+            since_date = (today - datetime.timedelta(days=7)).strftime("%Y-%m-%d")
         git_args.append(f"--since={since_date}")
         if "REPORT_DATE" in os.environ:
             git_args.append(f"--until={today.strftime('%Y-%m-%d')} 23:59:59")
