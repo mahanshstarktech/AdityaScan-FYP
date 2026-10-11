@@ -70,17 +70,20 @@ class LRUCacheManager:
                 except OSError:
                     pass
         pruned_bytes = 0
+        # Multi-tier LRU eviction: prune down to 80% watermark for continuous ingest headroom
         if total_size > self.max_bytes:
-            entries.sort(key=lambda x: x[0])  # oldest first
+            entries.sort(key=lambda x: x[0])  # sort by access/mtime
+            target_limit = self.max_bytes * 0.80
             for mtime, size, fp in entries:
                 try:
                     os.remove(fp)
                     total_size -= size
                     pruned_bytes += size
-                    if total_size <= self.max_bytes * 0.85:
+                    if total_size <= target_limit:
+                        logger.info("SDO cache pruned %d bytes to below 80%% watermark", pruned_bytes)
                         break
-                except OSError:
-                    pass
+                except OSError as err:
+                    logger.debug("Failed removing %s: %s", fp, err)
         return pruned_bytes
 
 
