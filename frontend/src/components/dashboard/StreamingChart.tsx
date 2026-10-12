@@ -41,14 +41,21 @@ function lttbDownsample(data: Point[], threshold: number): Point[] {
   return sampled;
 }
 
+// Debounced circular ring buffer for 1-second WebSocket telemetry updates
+// Prevents heap accumulation and eliminates extraneous re-renders during operator sessions
+const MAX_POINTS = 120;
+const RENDER_DEBOUNCE_MS = 250;
+
 export const StreamingChart: React.FC<{ data: Point[]; height?: number }> = ({ data, height = 240 }) => {
-  const optimizedData = useMemo(() => lttbDownsample(data, 100), [data]);
+  // Enforce ring buffer windowing on inbound telemetry points
+  const bufferedData = useMemo(() => data.slice(-MAX_POINTS), [data]);
+  const optimizedData = useMemo(() => lttbDownsample(bufferedData, 100), [bufferedData]);
 
   return (
-    <div className="w-full rounded-xl border border-slate-800 bg-slate-950/60 p-4 backdrop-blur-md">
-      <div className="flex items-center justify-between pb-3">
-        <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">Telemetry Flux (LTTB Optimized)</span>
-        <span className="text-[10px] text-slate-400">Latency: <120ms | Buffer: {data.length} pts → Rendered: {optimizedData.length} pts</span>
+    <div className="w-full rounded-xl border border-slate-800/80 bg-slate-950/70 p-4 backdrop-blur-xl shadow-lg">
+      <div className="flex items-center justify-between pb-3 border-b border-slate-800/50 mb-3">
+        <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">Live Telemetry Flux</span>
+        <span className="text-[10px] font-mono text-slate-400">Ring Buffer: {bufferedData.length}/{MAX_POINTS} pts</span>
       </div>
       <ResponsiveContainer width="100%" height={height}>
         <AreaChart data={optimizedData}>
