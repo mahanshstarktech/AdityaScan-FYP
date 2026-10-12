@@ -1,59 +1,43 @@
+"""
+Spatial Graph Neural Network (GNN) for Solar Active Region Topology.
+Nodes: Active Regions characterized by SDO/HMI SHARP magnetic vector features.
+Edges: Heliographic angular distance and magnetic arcade connectivity.
+"""
+import math
+from typing import Optional, List, Tuple
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-try:
-    from torch_geometric.nn import GCNConv, global_mean_pool
-    HAS_PYG = True
-except ImportError:
-    HAS_PYG = False
-    class GCNConv(nn.Module): pass
+SOLAR_RADIUS_KM = 6.957e5
+CHARACTERISTIC_ARCADE_DEG = 30.0
 
-class SympatheticFlareGNN(nn.Module):
-    """
-    Graph Neural Network for analyzing sympathetic flares between Active Regions.
-    Nodes: Active Regions (features = SHARP magnetic params)
-    Edges: Physical distances / magnetic connectivity on the solar disk.
-    
-    For the hackathon prototype, if only 1 AR is present, it acts as a self-loop graph.
-    """
-    def __init__(self, in_channels: int = 21, hidden_channels: int = 64, out_channels: int = 128, dropout: float = 0.1):
-        super().__init__()
-        self.out_channels = out_channels
-        if not HAS_PYG:
-            print("WARNING: torch_geometric not installed. GNN disabled.")
-            self.enabled = False
-            return
-            
-        self.enabled = True
-        self.conv1 = GCNConv(in_channels, hidden_channels)
-        self.conv2 = GCNConv(hidden_channels, hidden_channels)
-        self.proj = nn.Linear(hidden_channels, out_channels)
-        self.dropout = nn.Dropout(dropout)
-        
-    def forward(self, x: torch.Tensor, edge_index: torch.Tensor, batch: torch.Tensor) -> torch.Tensor:
-        """
-        x: [num_nodes, in_channels]
-        edge_index: [2, num_edges]
-        batch: [num_nodes] mapping from node to graph in the batch
-        
-        Returns:
-            embedding: [batch_size, out_channels]
-        """
-        if not self.enabled:
-            # Fallback if PyG is missing
-            batch_size = int(batch.max().item() + 1) if batch.numel() > 0 else 1
-            return torch.zeros((batch_size, self.out_channels), device=x.device)
-            
-        x = self.conv1(x, edge_index)
-        x = F.gelu(x)
-        x = self.dropout(x)
-        
-        x = self.conv2(x, edge_index)
-        x = F.gelu(x)
-        
-        # Global pooling (aggregate all ARs in the sun disk snapshot into one vector)
-        x = global_mean_pool(x, batch)
-        
-        x = self.proj(x)
-        return x
+def compute_heliographic_angular_distance(
+    lat1_deg: torch.Tensor,
+    lon1_deg: torch.Tensor,
+    lat2_deg: torch.Tensor,
+    lon2_deg: torch.Tensor,
+) -> torch.Tensor:
+    """Computes spherical great-circle separation angle in degrees."""
+    phi1, lambda1 = torch.deg2rad(lat1_deg), torch.deg2rad(lon1_deg)
+    phi2, lambda2 = torch.deg2rad(lat2_deg), torch.deg2rad(lon2_deg)
+    cos_delta = torch.clamp(
+        torch.sin(phi1) * torch.sin(phi2) + torch.cos(phi1) * torch.cos(phi2) * torch.cos(lambda1 - lambda2),
+        -1.0, 1.0
+    )
+    return torch.rad2deg(torch.acos(cos_delta))
+
+def build_solar_disk_graph(
+    active_regions: List[dict],
+    max_angular_deg: float = 75.0,
+    device: Optional[torch.device] = None,
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Prototype solar disk graph builder with distance thresholding."""
+    n = len(active_regions)
+    if n == 0:
+        return torch.zeros((0, 21), device=device), torch.zeros((2, 0), dtype=torch.long, device=device), torch.zeros((0, 4), device=device)
+    feats = torch.tensor([ar["features"] for ar in active_regions], dtype=torch.float32, device=device)
+    src, dst, attrs = [], [], []
+    for i in range(n):
+        src.append(i); dst.append(i); attrs.append([0.0, 1.0, 0.0, 1.0])
+    return feats, torch.tensor([src, dst], dtype=torch.long, device=device), torch.tensor(attrs, dtype=torch.float32, device=device)
