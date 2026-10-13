@@ -30,14 +30,29 @@ def compute_heliographic_angular_distance(
 def build_solar_disk_graph(
     active_regions: List[dict],
     max_angular_deg: float = 75.0,
+    arcade_scale_deg: float = CHARACTERISTIC_ARCADE_DEG,
+    polarity_coupling_factor: float = 0.35,
     device: Optional[torch.device] = None,
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    """Prototype solar disk graph builder with distance thresholding."""
-    n = len(active_regions)
-    if n == 0:
+    """Constructs topological graph with magnetic arcade connectivity decay."""
+    num_nodes = len(active_regions)
+    if num_nodes == 0:
         return torch.zeros((0, 21), device=device), torch.zeros((2, 0), dtype=torch.long, device=device), torch.zeros((0, 4), device=device)
-    feats = torch.tensor([ar["features"] for ar in active_regions], dtype=torch.float32, device=device)
-    src, dst, attrs = [], [], []
-    for i in range(n):
-        src.append(i); dst.append(i); attrs.append([0.0, 1.0, 0.0, 1.0])
-    return feats, torch.tensor([src, dst], dtype=torch.long, device=device), torch.tensor(attrs, dtype=torch.float32, device=device)
+    node_feats = torch.tensor([ar["features"] for ar in active_regions], dtype=torch.float32, device=device)
+    lats = torch.tensor([ar.get("latitude", 0.0) for ar in active_regions], dtype=torch.float32, device=device)
+    lons = torch.tensor([ar.get("longitude", 0.0) for ar in active_regions], dtype=torch.float32, device=device)
+    polarities = torch.tensor([ar.get("polarity", 1) for ar in active_regions], dtype=torch.float32, device=device)
+    src_list, dst_list, attr_list = [], [], []
+    for i in range(num_nodes):
+        src_list.append(i); dst_list.append(i); attr_list.append([0.0, 1.0, 0.0, 1.0])
+    for i in range(num_nodes):
+        for j in range(num_nodes):
+            if i == j: continue
+            delta_deg = compute_heliographic_angular_distance(lats[i], lons[i], lats[j], lons[j]).item()
+            if delta_deg <= max_angular_deg:
+                dist_km = (delta_deg * math.pi / 180.0) * SOLAR_RADIUS_KM
+                p_prod = float(polarities[i] * polarities[j])
+                coupling = 1.0 + (polarity_coupling_factor if p_prod < 0 else 0.0)
+                arcade_weight = math.exp(-delta_deg / arcade_scale_deg) * coupling
+                src_list.append(i); dst_list.append(j); attr_list.append([delta_deg, arcade_weight, dist_km / 1e6, p_prod])
+    return node_feats, torch.tensor([src_list, dst_list], dtype=torch.long, device=device), torch.tensor(attr_list, dtype=torch.float32, device=device)
