@@ -56,3 +56,27 @@ def build_solar_disk_graph(
                 arcade_weight = math.exp(-delta_deg / arcade_scale_deg) * coupling
                 src_list.append(i); dst_list.append(j); attr_list.append([delta_deg, arcade_weight, dist_km / 1e6, p_prod])
     return node_feats, torch.tensor([src_list, dst_list], dtype=torch.long, device=device), torch.tensor(attr_list, dtype=torch.float32, device=device)
+
+class SolarGNNConv(nn.Module):
+    r"""Edge-conditioned spatial message passing layer for Active Region topology."""
+    def __init__(self, in_features: int, out_features: int, edge_features: int = 4):
+        super().__init__()
+        self.lin_self = nn.Linear(in_features, out_features, bias=False)
+        self.lin_neigh = nn.Linear(in_features, out_features, bias=False)
+        self.lin_edge = nn.Linear(edge_features, out_features, bias=True)
+        self.norm = nn.LayerNorm(out_features)
+        self.act = nn.GELU()
+
+    def forward(self, x: torch.Tensor, edge_index: torch.Tensor, edge_attr: torch.Tensor) -> torch.Tensor:
+        num_nodes = x.size(0)
+        h_self = self.lin_self(x)
+        if edge_index.numel() == 0 or edge_index.size(1) == 0:
+            return self.norm(self.act(h_self))
+        src, dst = edge_index[0], edge_index[1]
+        x_src = x[src]
+        h_edge = self.lin_edge(edge_attr)
+        weights = edge_attr[:, 1].unsqueeze(-1)
+        messages = self.act(self.lin_neigh(x_src) + h_edge) * weights
+        aggr = torch.zeros((num_nodes, h_self.size(1)), device=x.device, dtype=x.dtype)
+        aggr.scatter_add_(0, dst.unsqueeze(-1).expand_as(messages), messages)
+        return self.act(self.norm(h_self + aggr))
