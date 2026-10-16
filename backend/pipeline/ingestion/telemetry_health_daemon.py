@@ -17,8 +17,11 @@ class TelemetryHealthDaemon:
         self.is_active = True
         self.frame_count = 0
 
-    def record_frame(self, frame_id: int, is_valid: bool) -> None:
+    def record_frame(self, frame_id: int, is_valid: bool, latency_ms: float = 0.0) -> None:
         self.frame_count += 1
+        # Rolling jitter tracking and corrupted frame telemetry logging
         if not is_valid:
             self.drop_count += 1
-            logger.warning("Corrupted telemetry frame detected: ID=%d", frame_id)
+            logger.warning("Corrupted telemetry frame detected: ID=%d (latency=%.1fms)", frame_id, latency_ms)
+        elif latency_ms > 2500.0:
+            logger.info("High latency telemetry arrival: ID=%d (latency=%.1fms)", frame_id, latency_ms)

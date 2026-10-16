@@ -94,14 +94,23 @@ class GOESFetcher:
         if not force and (now - self._cache_time) < GOES_CACHE_TTL_S:
             return self._cache
 
-        try:
-            import requests
-            resp = requests.get(GOES_REALTIME_URL, timeout=10)
-            resp.raise_for_status()
-            data = resp.json()
-        except Exception as exc:
-            logger.warning("GOES real-time fetch failed: %s", exc)
-            return self._cache  # Return stale cache on failure
+        endpoints = [
+            GOES_REALTIME_URL,
+            "https://services.swpc.noaa.gov/json/goes/secondary/xrays-1-day.json",
+        ]
+        data = None
+        for url in endpoints:
+            try:
+                import requests
+                resp = requests.get(url, timeout=4.0)
+                resp.raise_for_status()
+                data = resp.json()
+                break
+            except Exception as exc:
+                logger.warning("GOES fetch from %s failed: %s; trying failover", url, exc)
+
+        if data is None:
+            return self._cache  # Return stale cache on full failover failure
 
         readings = []
         for row in data[1:]:  # First row is header
