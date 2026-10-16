@@ -238,7 +238,8 @@ class HOPEDetector:
         if len(sxr_counts_1s) < 2 or len(hxr_counts_1s) < 2:
             return float("nan")
 
-        hxr_integral = float(np.trapz(hxr_counts_1s, dx=dt_s))
+        trapz_fn = getattr(np, "trapezoid", getattr(np, "trapz", None))
+        hxr_integral = float(trapz_fn(hxr_counts_1s, dx=dt_s))
         sxr_peak = float(np.max(sxr_counts_1s))
 
         if sxr_peak < 1e-10 or hxr_integral < 0:

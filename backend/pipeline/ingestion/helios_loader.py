@@ -54,8 +54,8 @@ HOPE precursor integration:
 from __future__ import annotations
 
 import glob
-import zipfile
 import logging
+import zipfile
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -219,7 +219,7 @@ class HEL1OSLoader:
         date_str: Optional[str] = None,
     ) -> list[HEL1OSMeta]:
         """
-        Scan for HEL1OS L2 FITS files.
+        Scan for HEL1OS L2 FITS files in self.data_dir and self.data_dir/_extracted.
 
         Parameters
         ----------
@@ -230,17 +230,25 @@ class HEL1OSLoader:
         """
         from astropy.io import fits
 
-        pattern_str = HEL1OS_FILE_PATTERN_CDTE if "CdTe" in detector else HEL1OS_FILE_PATTERN_CZT
-        pattern = str(self.data_dir / "**" / pattern_str)
-        all_files = glob.glob(pattern, recursive=True)
+        detector_upper = detector.upper()
+        all_paths: set[Path] = set()
 
-        if date_str:
-            all_files = [f for f in all_files if date_str in Path(f).name]
+        # Recursively search all FITS extensions in data_dir (including _extracted)
+        for ext in ("*.fits", "*.fit", "*.fts"):
+            for p in self.data_dir.rglob(ext):
+                p_name_upper = p.name.upper()
+
+                # Match detector name (e.g., CdTe or CZT)
+                if detector_upper in p_name_upper or detector.lower() in p.name.lower():
+                    # Filter by date_str if provided
+                    if date_str and date_str not in p.name:
+                        continue
+                    all_paths.add(p)
 
         metas: list[HEL1OSMeta] = []
-        for fp in sorted(all_files):
+        for fp in sorted(all_paths):
             try:
-                meta = self._parse_header(fp, fits, detector)
+                meta = self._parse_header(str(fp), fits, detector)
                 if meta.quality < HEL1OS_QUALITY_MIN:
                     continue
                 metas.append(meta)
@@ -250,7 +258,7 @@ class HEL1OSLoader:
         if metas:
             logger.info("Found %d HEL1OS %s L2 files", len(metas), detector)
         else:
-            logger.debug("Found 0 HEL1OS %s L2 files", detector)
+            logger.debug("Found 0 HEL1OS %s L2 files in %s", detector, self.data_dir)
         return metas
 
     # ── Light curve extraction ────────────────────────────────────────────────
@@ -322,10 +330,20 @@ class HEL1OSLoader:
                             continue
                         member_name = Path(member).name
                         member_lower = member_name.lower()
-                        if not member_lower.startswith(("lightcurve_cdte", "lightcurve_czt")):
+
+                        # Accept official PRADAN L2 files (AL1_HXS...) or lightcurve_ prefixes
+                        is_valid_helios = (
+                            member_lower.startswith(("lightcurve_cdte", "lightcurve_czt"))
+                            or "hxs" in member_lower
+                            or "cdte" in member_lower
+                            or "czt" in member_lower
+                        )
+                        if not is_valid_helios:
                             continue
+
                         if date_str not in member_name and date_str not in zip_path.name:
                             continue
+
                         out_path = extract_root / zip_path.stem / member_name
                         if out_path.exists():
                             extracted_or_cached += 1
@@ -346,10 +364,12 @@ class HEL1OSLoader:
         """Parse PRADAN HEL1OS L1 lightcurve_*.fits products."""
         from astropy.io import fits
 
-        files = sorted(self.data_dir.glob(f"**/*{date_str}*/lightcurve_*.fits"))
-        if not files:
-            files = sorted(self.data_dir.glob("**/lightcurve_*.fits"))
-            files = [fp for fp in files if date_str in str(fp)]
+        # Search recursively across data_dir and data_dir/_extracted
+        all_fits = list(self.data_dir.rglob("*.fits")) + list(self.data_dir.rglob("*.fit"))
+        files = [
+            fp for fp in all_fits
+            if date_str in fp.name or date_str in fp.parent.name
+        ]
 
         n_samples = 0
         for fp in files:
@@ -378,24 +398,24 @@ class HEL1OSLoader:
 
     @staticmethod
     def _l1_field_name(extname: str, detector_hint: str) -> Optional[str]:
-        name = extname.upper()
-        if "CDTE" in name or "CDTE" in detector_hint.upper():
-            if "5.00KEV_TO_20.00KEV" in name:
+        name = (extname + "_" + detector_hint).upper()
+        if "CDTE" in name:
+            if "5" in name and "20" in name:
                 return "cdte1_5_20"
-            if "20.00KEV_TO_30.00KEV" in name:
+            if "20" in name and "30" in name:
                 return "cdte1_20_30"
-            if "30.00KEV_TO_40.00KEV" in name:
+            if "30" in name and "40" in name:
                 return "cdte1_30_40"
-            if "40.00KEV_TO_60.00KEV" in name:
+            if "40" in name and "60" in name:
                 return "cdte1_40_60"
-        if "CZT" in name or "CZT" in detector_hint.upper():
-            if "20.00KEV_TO_40.00KEV" in name:
+        if "CZT" in name:
+            if "20" in name and "40" in name:
                 return "czt1_20_40"
-            if "40.00KEV_TO_60.00KEV" in name:
+            if "40" in name and "60" in name:
                 return "czt1_40_60"
-            if "60.00KEV_TO_80.00KEV" in name:
+            if "60" in name and "80" in name:
                 return "czt1_60_80"
-            if "80.00KEV_TO_150.00KEV" in name:
+            if "80" in name and "150" in name:
                 return "czt1_80_150"
         return None
 
