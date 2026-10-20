@@ -322,7 +322,11 @@ class HEL1OSLoader:
                             continue
                         member_name = Path(member).name
                         member_lower = member_name.lower()
-                        if not member_lower.startswith(("lightcurve_cdte", "lightcurve_czt")):
+                        if not (
+                            member_lower.startswith(("lightcurve_cdte", "lightcurve_czt", "al1_hxs91"))
+                            or "cdte" in member_lower
+                            or "czt" in member_lower
+                        ):
                             continue
                         if date_str not in member_name and date_str not in zip_path.name:
                             continue
