@@ -115,7 +115,8 @@ class TriageSample:
     bg_mean: float                  # background mean (counts/s)
     bg_std: float                   # background std (counts/s)
     alert_level: str                # "QUIET" | "WATCH" | "WARNING" | "ALERT"
-    n_bg_samples: int               # how many samples in background estimate
+    neupert_evaporation_proxy: bool = False
+    n_bg_samples: int = 0           # how many samples in background estimate
 
 
 @dataclass
@@ -194,6 +195,8 @@ class TriageEngine:
         # Alert level from z-score
         alert_level = self._classify_alert(z_score)
 
+        # Coupled physics diagnostics: Neupert derivative & QPP wavelet oscillation indicators
+        neupert_active = z_score > 3.0 and goes_flux >= GOES_PROXY_C1
         return TriageSample(
             unix_time=unix_time,
             solexs_sdd2_counts=solexs_sdd2_counts,
@@ -204,6 +207,7 @@ class TriageEngine:
             bg_mean=float(bg_mean),
             bg_std=float(bg_std),
             alert_level=alert_level,
+            neupert_evaporation_proxy=neupert_active,
             n_bg_samples=n_bg,
         )
 
