@@ -34,3 +34,5 @@ models/*.pkl
 *.log
 .DS_Store
 .pytest_cache/
+.wrangler/
+frontend/.wrangler/
