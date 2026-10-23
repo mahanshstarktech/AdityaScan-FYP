@@ -31,7 +31,7 @@ export const RadiationBanner: React.FC<RadiationBannerProps> = ({
           </span>
         </div>
         <div className="flex items-center gap-2 text-[11px]">
-          <span className="text-slate-400">Impacted Assets:</span>
+          <span className="text-slate-400">ISRO Operational Assets / Constellations:</span>
           {affectedConstellations.map(c => (
             <span key={c} className="rounded bg-slate-900/80 px-2 py-0.5 font-mono text-cyan-300 border border-slate-700">
               {c}
