@@ -53,7 +53,10 @@ In high-reliability space and software engineering teams, tasks and user stories
 * **User Stories:** `US-ML-02`, `US-ING-02`, `US-FS-02`
 * [Week 7 (Sep 21 – Sep 25, 2026)](./week-07_2026-09-21.md): Chronological Train/Val/Test Split Generator, Async NOAA Poller, Frontend Profiling.
 * [Week 8 (Sep 28 – Oct 02, 2026)](./week-08_2026-09-28.md): Flare Class Imbalance Resolution (1:1200), Multi-GB SDO Caching, Active Region Drawer Modal.
-* [Week 9 (Oct 05 – Oct 10, 2026 - Active Sprint)](./week-09_2026-10-05.md): Chunked Distributed PyTorch `DataLoader` (<5 GB RAM), End-to-End Aditya-L1/GOES Sync Benchmarking, NavIC & GSAT Radiation Banners.
+* [Week 9 (Oct 05 – Oct 10, 2026)](./week-09_2026-10-05.md): Chunked Distributed PyTorch `DataLoader` (<5 GB RAM), End-to-End Aditya-L1/GOES Sync Benchmarking, NavIC & GSAT Radiation Banners.
+* [Week 10 (Oct 12 – Oct 16, 2026)](./week-10_2026-10-12.md): Active Region GNN Topology, SDO SHARP CEA Caching, and Active Region Status Cards (`PR #19, #20, #21`).
+* [Week 11 (Oct 19 – Oct 23, 2026 - Concluding Sprint 2)](./week-11_2026-10-19.md): Spatial-Temporal Cross-Attention Fusion, Savitzky-Golay Neupert Proxy, Morlet CWT QPP Wavelets, and Multi-Horizon Probability Gauges (`PR #22, #23, #24`).
+
 
 ---
 
