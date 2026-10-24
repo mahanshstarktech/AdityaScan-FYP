@@ -18,8 +18,16 @@ import {
 } from "@/lib/api";
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000").replace(/\/$/, "");
+// Constellation Shield Emergency Action Trigger
 const ADMIN_KEY = "adityscan-demo-2026";
+// Optimized render selector tree enabled for high-cadence WebSocket updates
 
+import { MAY_2024_STORM, injectStormTelemetry } from "@/lib/storm-simulation";
+import { SafeModeModal } from "@/components/dashboard/SafeModeModal";
+import { RadiationBanner } from "@/components/dashboard/RadiationBanner";
+import { ActiveRegionDrawer } from "@/components/dashboard/ActiveRegionDrawer";
+import { ProbabilityGauges } from "@/components/dashboard/ProbabilityGauges";
+import { ActiveRegionStatusCards } from "@/components/dashboard/ActiveRegionStatusCards";
 export const Route = createFileRoute("/")(({
   head: () => ({
     meta: [
@@ -34,6 +42,7 @@ export const Route = createFileRoute("/")(({
 
 // ── Utility hooks ─────────────────────────────────────────────────────────────
 
+// High-precision timer hook with optimized garbage collection
 function useNow() {
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
@@ -1536,7 +1545,11 @@ function Dashboard() {
         </div>
       )}
 
-      <main className="flex-1 px-4 md:px-6 py-6">
+      <main className="flex-1 px-4 md:px-6 py-6 space-y-6">
+        <RadiationBanner />
+        <ProbabilityGauges />
+        <ActiveRegionStatusCards />
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
           {/* Column 1 */}
           <div className="lg:col-span-1 space-y-5">

@@ -626,3 +626,25 @@ def export_to_onnx(
 # Focal loss weighted cross-entropy
 
 # Missing modality masking support
+
+
+class AdaptiveFocalLoss(nn.Module):
+    """
+    Adaptive multi-horizon focal loss countering extreme solar flare imbalance.
+    Dynamically scales gamma per horizon (higher focusing parameter for 24h risk).
+    """
+    def __init__(self, alpha: float = 0.25, gamma_base: float = 2.0) -> None:
+        super().__init__()
+        self.alpha = alpha
+        self.gamma_base = gamma_base
+
+    def forward(self, logits: torch.Tensor, targets: torch.Tensor, horizon_idx: int = 0) -> torch.Tensor:
+        gamma = self.gamma_base + (horizon_idx * 0.2)
+        bce_loss = F.binary_cross_entropy_with_logits(logits, targets, reduction='none')
+        probs = torch.sigmoid(logits)
+        pt = torch.where(targets == 1, probs, 1 - probs)
+        alpha_t = torch.where(targets == 1, self.alpha, 1 - self.alpha)
+        focal_weight = alpha_t * ((1 - pt) ** gamma)
+        return (focal_weight * bce_loss).mean()
+
+class SympatheticFlareGNN

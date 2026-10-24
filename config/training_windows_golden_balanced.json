@@ -2,9 +2,13 @@
   "name": "golden_balanced_aditya_l1_v1",
   "description": "Balanced lean Aditya-L1 training plan: quiet/control windows plus May 2024 extreme flare window.",
   "required_modalities": ["solexs", "helios", "goes"],
+  "quarantine_buffer_hours": 24,
+  "chronological_validation": true,
   "optional_modalities": ["mag"],
   "manual_modalities": ["mag"],
   "auto_modalities": ["solexs", "helios", "goes"],
+  "sample_rebalance_strategy": "effective_num",
+  "flare_oversample_ratio": 4.0,
   "future_modalities": ["swis", "suit", "sharp"],
   "windows": [
     {

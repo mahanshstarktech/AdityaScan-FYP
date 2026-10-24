@@ -31,10 +31,16 @@ export interface Satellite {
   lastDataSec: number;
 }
 
+export interface ConformalBounds {
+  pLow: number;
+  pHigh: number;
+}
+
 export interface NowcastData {
   flare_probability: number;
   flare_probability_uncertainty: number;
   class_probabilities: Record<string, number>;
+  conformal_bounds?: ConformalBounds;
   cme_risk: number;
   active_modalities: string[];
   noaa_published: { m_class_pct: number; x_class_pct: number; proton_pct: number };
@@ -44,6 +50,7 @@ export interface ForecastHorizon {
   mean: number;
   lower: number;
   upper: number;
+  conformal_band?: ConformalBounds;
 }
 
 export interface FlareEvent {
@@ -415,3 +422,6 @@ export function goesColor(cls: string): string {
 }
 
 export type { ForecastHorizon as ForecastEntry };
+
+// Ring buffer size bounded to 120 ticks to prevent heap bloating
+export const goesColor

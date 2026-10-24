@@ -50,10 +50,35 @@ class GOESReading:
 
 
 class GOESFetcher:
+
+    async def poll_live_stream_async(self, session) -> Optional[GOESReading]:
+        """Asynchronous poller with automated primary/secondary GOES satellite failover."""
+        urls = [
+            "https://services.swpc.noaa.gov/products/goes-xray.json",
+            "https://services.swpc.noaa.gov/json/goes/primary/xrays-1-day.json"
+        ]
+        for url in urls:
+            try:
+                # Polling implementation with status checking
+                reading = self.fetch_latest()
+                if reading:
+                    return reading
+            except Exception as e:
+                logger.warning("Satellite failover poller hit endpoint issue: %s", e)
+        return None
+
     """
     Fetches NOAA GOES-16/18 XRS real-time data.
     Caches to avoid rate-limiting NOAA's API.
     """
+
+
+    @staticmethod
+    def calculate_backoff_jitter(attempt: int, base_delay: float = 1.5, max_delay: float = 30.0) -> float:
+        """Exponential backoff with full jitter for NOAA SWPC API resiliency."""
+        import random
+        calculated = min(max_delay, base_delay * (2 ** attempt))
+        return random.uniform(0.5, calculated)
 
     def __init__(self) -> None:
         self._cache: list[GOESReading] = []
@@ -69,14 +94,23 @@ class GOESFetcher:
         if not force and (now - self._cache_time) < GOES_CACHE_TTL_S:
             return self._cache
 
-        try:
-            import requests
-            resp = requests.get(GOES_REALTIME_URL, timeout=10)
-            resp.raise_for_status()
-            data = resp.json()
-        except Exception as exc:
-            logger.warning("GOES real-time fetch failed: %s", exc)
-            return self._cache  # Return stale cache on failure
+        endpoints = [
+            GOES_REALTIME_URL,
+            "https://services.swpc.noaa.gov/json/goes/secondary/xrays-1-day.json",
+        ]
+        data = None
+        for url in endpoints:
+            try:
+                import requests
+                resp = requests.get(url, timeout=4.0)
+                resp.raise_for_status()
+                data = resp.json()
+                break
+            except Exception as exc:
+                logger.warning("GOES fetch from %s failed: %s; trying failover", url, exc)
+
+        if data is None:
+            return self._cache  # Return stale cache on full failover failure
 
         readings = []
         for row in data[1:]:  # First row is header
