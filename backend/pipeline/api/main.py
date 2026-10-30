@@ -416,15 +416,39 @@ def _build_aditya_nowcast() -> dict:
     # ── CME risk ──────────────────────────────────────────────────────────────
     cme_risk = _estimate_cme_risk(cls, wind)
 
-    # ── Multi-horizon forecast ─────────────────────────────────────────────────
+    # ── Multi-horizon forecast (Calibrated via AdityaScanInferenceEngine) ─────
     p_24h = noaa_m + noaa_x
-    forecast = {
-        "5min":  {"mean": round(flare_prob * 0.85, 1), "lower": round(flare_prob * 0.85 - 12, 1), "upper": round(flare_prob * 0.85 + 12, 1)},
-        "10min": {"mean": round(flare_prob * 0.92, 1), "lower": round(flare_prob * 0.92 - 10, 1), "upper": round(flare_prob * 0.92 + 10, 1)},
-        "15min": {"mean": round(flare_prob, 1),        "lower": round(flare_prob - 13, 1),         "upper": round(flare_prob + 13, 1)},
-        "30min": {"mean": round(flare_prob * 0.88, 1), "lower": round(flare_prob * 0.88 - 15, 1),  "upper": round(flare_prob * 0.88 + 15, 1)},
-        "60min": {"mean": round(p_24h * 0.8, 1),       "lower": round(p_24h * 0.8 - 18, 1),        "upper": round(p_24h * 0.8 + 18, 1)},
-    }
+    try:
+        from pipeline.ml.inference_engine import get_inference_engine
+        import numpy as _np
+        slx_mock = _np.array([flux, state.solexs_z, 1.0], dtype=_np.float32) if state.solexs_available else None
+        hlx_mock = _np.array([120.0, 80.0], dtype=_np.float32) if (state.hel1os_available and state.helios_spike) else None
+        _inf_res = get_inference_engine().predict(solexs_features=slx_mock, helios_features=hlx_mock)
+        forecast = {
+            "5min":  {"mean": round(_inf_res.multi_horizon_forecast["5m"].probability * 100.0, 1),
+                       "lower": round(_inf_res.multi_horizon_forecast["5m"].confidence_interval[0] * 100.0, 1),
+                       "upper": round(_inf_res.multi_horizon_forecast["5m"].confidence_interval[1] * 100.0, 1)},
+            "10min": {"mean": round(_inf_res.multi_horizon_forecast["10m"].probability * 100.0, 1),
+                       "lower": round(_inf_res.multi_horizon_forecast["10m"].confidence_interval[0] * 100.0, 1),
+                       "upper": round(_inf_res.multi_horizon_forecast["10m"].confidence_interval[1] * 100.0, 1)},
+            "15min": {"mean": round(_inf_res.multi_horizon_forecast["15m"].probability * 100.0, 1),
+                       "lower": round(_inf_res.multi_horizon_forecast["15m"].confidence_interval[0] * 100.0, 1),
+                       "upper": round(_inf_res.multi_horizon_forecast["15m"].confidence_interval[1] * 100.0, 1)},
+            "30min": {"mean": round(_inf_res.multi_horizon_forecast["30m"].probability * 100.0, 1),
+                       "lower": round(_inf_res.multi_horizon_forecast["30m"].confidence_interval[0] * 100.0, 1),
+                       "upper": round(_inf_res.multi_horizon_forecast["30m"].confidence_interval[1] * 100.0, 1)},
+            "60min": {"mean": round(_inf_res.multi_horizon_forecast["60m"].probability * 100.0, 1),
+                       "lower": round(_inf_res.multi_horizon_forecast["60m"].confidence_interval[0] * 100.0, 1),
+                       "upper": round(_inf_res.multi_horizon_forecast["60m"].confidence_interval[1] * 100.0, 1)},
+        }
+    except Exception:
+        forecast = {
+            "5min":  {"mean": round(flare_prob * 0.85, 1), "lower": round(flare_prob * 0.85 - 12, 1), "upper": round(flare_prob * 0.85 + 12, 1)},
+            "10min": {"mean": round(flare_prob * 0.92, 1), "lower": round(flare_prob * 0.92 - 10, 1), "upper": round(flare_prob * 0.92 + 10, 1)},
+            "15min": {"mean": round(flare_prob, 1),        "lower": round(flare_prob - 13, 1),         "upper": round(flare_prob + 13, 1)},
+            "30min": {"mean": round(flare_prob * 0.88, 1), "lower": round(flare_prob * 0.88 - 15, 1),  "upper": round(flare_prob * 0.88 + 15, 1)},
+            "60min": {"mean": round(p_24h * 0.8, 1),       "lower": round(p_24h * 0.8 - 18, 1),        "upper": round(p_24h * 0.8 + 18, 1)},
+        }
     for h in forecast.values():
         h["mean"]  = max(0, min(99, h["mean"]))
         h["lower"] = max(0, min(99, h["lower"]))
