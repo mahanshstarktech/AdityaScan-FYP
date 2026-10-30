@@ -57,6 +57,10 @@ In high-reliability space and software engineering teams, tasks and user stories
 * [Week 10 (Oct 12 – Oct 16, 2026)](./week-10_2026-10-12.md): Active Region GNN Topology, SDO SHARP CEA Caching, and Active Region Status Cards (`PR #19, #20, #21`).
 * [Week 11 (Oct 19 – Oct 23, 2026 - Concluding Sprint 2)](./week-11_2026-10-19.md): Spatial-Temporal Cross-Attention Fusion, Savitzky-Golay Neupert Proxy, Morlet CWT QPP Wavelets, and Multi-Horizon Probability Gauges (`PR #22, #23, #24`).
 
+### Sprint 3: Production ONNX Integration, In-Situ MAG & Edge Deployment (26-10-2026 to 27-11-2026)
+* **User Stories:** `US-ML-03`, `US-PHY-03`, `US-FS-03`
+* [Week 12 (Oct 26 – Oct 30, 2026)](./week-12_2026-10-26.md): Production ONNX Integration, Temperature Scaling (T=0.863), Conformal Uncertainty Sets, Aditya-L1 MAG L2 Variational Filter, and Live WebSocket Testing (`PR #25, #26, #27`).
+
 
 ---
 
