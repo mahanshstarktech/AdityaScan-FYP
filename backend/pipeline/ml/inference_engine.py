@@ -21,6 +21,11 @@ from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
+from pipeline.ml.active_region_graph_builder import (
+    ActiveRegionGraphBuilder,
+    ActiveRegionNode,
+)
+
 try:
     import torch
     import torch.nn as nn
@@ -86,6 +91,7 @@ class AdityaScanInferenceEngine:
             "60m": 0.228,
             "nowcast": 0.065,
         }
+        self.graph_builder = ActiveRegionGraphBuilder()
 
         self._load_model_if_available()
 
@@ -152,6 +158,30 @@ class AdityaScanInferenceEngine:
             norm_excitation = min(1.0, norm_excitation + 0.15)
         if b_var > 15.0:
             norm_excitation = min(1.0, norm_excitation + 0.10)
+
+        # Modulate excitation by coronal arcade magnetic coupling if active regions provided
+        if active_regions and len(active_regions) > 1:
+            try:
+                ar_nodes = [
+                    ActiveRegionNode(
+                        ar_id=int(ar.get("ar_id", idx + 1)),
+                        latitude_deg=float(ar.get("latitude_deg", 0.0)),
+                        longitude_deg=float(ar.get("longitude_deg", 0.0)),
+                        area_msh=float(ar.get("area_msh", 500.0)),
+                        flux_density_gauss=float(ar.get("flux_density_gauss", 1.0)),
+                        polarity=int(ar.get("polarity", 1)),
+                        features=list(ar.get("features", [0.0] * 21)),
+                    )
+                    for idx, ar in enumerate(active_regions)
+                    if isinstance(ar, dict)
+                ]
+                if len(ar_nodes) > 1:
+                    _, _, edges = self.graph_builder.build_graph(ar_nodes)
+                    if edges:
+                        max_coupling = max(e.arcade_coupling_weight for e in edges)
+                        norm_excitation = min(1.0, norm_excitation + 0.08 * max_coupling)
+            except Exception as e:
+                logger.debug("Coronal arcade coupling computation skipped: %s", e)
 
         # 1. Temperature-scaled nowcast logit
         raw_nowcast_logit = (norm_excitation - 0.45) * 5.0
