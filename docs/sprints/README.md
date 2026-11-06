@@ -60,6 +60,7 @@ In high-reliability space and software engineering teams, tasks and user stories
 ### Sprint 3: Production ONNX Integration, In-Situ MAG & Edge Deployment (26-10-2026 to 27-11-2026)
 * **User Stories:** `US-ML-03`, `US-PHY-03`, `US-FS-03`
 * [Week 12 (Oct 26 – Oct 30, 2026)](./week-12_2026-10-26.md): Production ONNX Integration, Temperature Scaling (T=0.863), Conformal Uncertainty Sets, Aditya-L1 MAG L2 Variational Filter, and Live WebSocket Testing (`PR #25, #26, #27`).
+* [Week 13 (Nov 02 – Nov 06, 2026)](./week-13_2026-11-02.md): Coronal Arcade GNN Adjacency Graph Builder, Composite Focal-Brier Multi-Horizon Loss, ASPEX-SWIS Solar Wind Ingestion (Plasma Beta & Alfven Speed), and Coronal Arcade Matrix UI (`PR #28, #29, #30`).
 
 
 ---
