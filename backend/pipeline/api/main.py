@@ -419,6 +419,7 @@ def _build_aditya_nowcast() -> dict:
     # ── Multi-horizon forecast (Calibrated via AdityaScanInferenceEngine) ─────
     p_24h = noaa_m + noaa_x
     try:
+        from pipeline.ml.async_inference_worker import get_inference_worker
         from pipeline.ml.inference_engine import get_inference_engine
         import numpy as _np
         slx_mock = _np.array([flux, state.solexs_z, 1.0], dtype=_np.float32) if state.solexs_available else None
