@@ -61,6 +61,7 @@ In high-reliability space and software engineering teams, tasks and user stories
 * **User Stories:** `US-ML-03`, `US-PHY-03`, `US-FS-03`
 * [Week 12 (Oct 26 – Oct 30, 2026)](./week-12_2026-10-26.md): Production ONNX Integration, Temperature Scaling (T=0.863), Conformal Uncertainty Sets, Aditya-L1 MAG L2 Variational Filter, and Live WebSocket Testing (`PR #25, #26, #27`).
 * [Week 13 (Nov 02 – Nov 06, 2026)](./week-13_2026-11-02.md): Coronal Arcade GNN Adjacency Graph Builder, Composite Focal-Brier Multi-Horizon Loss, ASPEX-SWIS Solar Wind Ingestion (Plasma Beta & Alfven Speed), and Coronal Arcade Matrix UI (`PR #28, #29, #30`).
+* [Week 14 (Nov 09 – Nov 13, 2026)](./week-14_2026-11-09.md): Multi-Horizon Split Conformal Calibration (90% CI), Production ONNX Exporter, Asynchronous Inference Worker Daemon, Solar Cycle 25 Benchmark Scorecard, Autonomous Telemetry QC Filter, and NavIC/GSAT Radiation Hazard Matrix UI (`PR #31, #32, #33`).
 
 
 ---
